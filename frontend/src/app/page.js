@@ -103,7 +103,7 @@ export default function Home() {
         }]);
       }
     } catch (err) {
-      console.error('Chat error:', err);
+      console.warn('Chat error:', err);
       setChatHistory(prev => [...prev, { 
         role: 'assistant', 
         text: 'Connection failed. Ensure the FastAPI backend is running.' 
@@ -137,7 +137,7 @@ export default function Home() {
         alert('Failed to generate PowerPoint presentation.');
       }
     } catch (err) {
-      console.error(err);
+      console.warn('Error connecting to presentation server:', err);
       alert('Error connecting to presentation server.');
     }
   };
@@ -162,7 +162,7 @@ export default function Home() {
         alert('Failed to generate PDF report.');
       }
     } catch (err) {
-      console.error(err);
+      console.warn('Error connecting to report server:', err);
       alert('Error connecting to report server.');
     }
   };
@@ -180,7 +180,7 @@ export default function Home() {
         setStats(data);
       }
     } catch (err) {
-      console.error('Error fetching statistics:', err);
+      console.warn('Error fetching statistics:', err);
     }
   };
 
@@ -192,7 +192,7 @@ export default function Home() {
         fetchStats();
       }
     } catch (err) {
-      console.error('Error resetting statistics:', err);
+      console.warn('Error resetting statistics:', err);
     }
   };
 
@@ -240,7 +240,7 @@ export default function Home() {
         await generateBrief(data.file_hash, eli5);
       }
     } catch (err) {
-      console.error(err);
+      console.warn('Ingestion failed:', err);
       setStatusMessage('Ingestion failed. Ensure FastAPI backend is running on port 8000.');
     } finally {
       setUploading(false);
@@ -271,7 +271,7 @@ export default function Home() {
       // Update statistics
       fetchStats();
     } catch (err) {
-      console.error(err);
+      console.warn('Synthesis failed:', err);
       setStatusMessage('Synthesis failed. Ensure API keys are configured correctly.');
     } finally {
       setGenerating(false);
