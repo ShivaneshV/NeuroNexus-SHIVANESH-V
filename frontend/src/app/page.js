@@ -111,6 +111,35 @@ export default function Home() {
     }
   };
 
+  // Presentation Slide States & Download Function
+  const [showPresentationModal, setShowPresentationModal] = useState(false);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+
+  const handleDownloadPptx = async () => {
+    try {
+      const res = await fetch('http://localhost:8000/api/download_presentation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ file_hash: fileHash, slides: briefData.presentation_slides }),
+      });
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `PaperPilot_${fileHash.substring(0, 8)}_Slides.pptx`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      } else {
+        alert('Failed to generate PowerPoint presentation.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error connecting to presentation server.');
+    }
+  };
+
   // Load API tracking stats on mount
   useEffect(() => {
     fetchStats();
@@ -351,8 +380,17 @@ export default function Home() {
                 } ${!fileHash ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
               >
                 <Brain className={`w-3.5 h-3.5 ${eli5 ? 'text-amber-400 animate-pulse' : 'text-slate-400'}`} />
-                {eli5 ? 'ELI5 Mode Active' : 'Switch to ELI5'}
+                {eli5 ? 'Feynman Mode Active' : 'Switch to Feynman Mode'}
               </button>
+
+              {briefData && briefData.presentation_slides && (
+                <button
+                  onClick={() => setShowPresentationModal(true)}
+                  className="px-4 py-2 text-xs font-bold border rounded-xl shadow-md transition-all flex items-center gap-1.5 bg-violet-950/40 text-violet-300 border-violet-800 hover:bg-violet-900/40 cursor-pointer animate-fade-in"
+                >
+                  📽️ Export to Presentation
+                </button>
+              )}
             </div>
             
             {/* Realtime Action Logs */}
@@ -726,6 +764,96 @@ export default function Home() {
           </div>
         </section>
         
+      {/* 5-Slide Presentation Deck Overlay Modal */}
+      {showPresentationModal && briefData && briefData.presentation_slides && (
+        <div className="fixed inset-0 bg-slate-950/95 backdrop-blur-sm z-50 flex items-center justify-center p-6 animate-fade-in">
+          <div className="bg-slate-950 border border-slate-900 rounded-3xl w-full max-w-4xl flex flex-col p-6 shadow-2xl relative">
+            
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-slate-900 pb-4.5 mb-5">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-violet-500 inline-block animate-pulse" />
+                <span className="text-xs font-extrabold text-slate-400 tracking-wider uppercase">Interactive Slide Deck</span>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleDownloadPptx}
+                  className="px-3 py-1.5 bg-emerald-950/40 hover:bg-emerald-900/40 border border-emerald-800 rounded-xl text-[10px] font-extrabold text-emerald-300 transition-colors flex items-center gap-1 cursor-pointer"
+                >
+                  📥 Download PPTX
+                </button>
+                <button
+                  onClick={() => {
+                    setShowPresentationModal(false);
+                    setCurrentSlideIndex(0);
+                  }}
+                  className="px-3 py-1.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl text-[10px] font-extrabold text-slate-300 transition-colors cursor-pointer"
+                >
+                  ✕ Close
+                </button>
+              </div>
+            </div>
+
+            {/* Slide Body Frame (16:9 Aspect Ratio Container) */}
+            <div className="aspect-[16/9] w-full bg-slate-900/60 border border-slate-900 rounded-2xl p-8 flex flex-col justify-between shadow-inner relative overflow-hidden">
+              {/* slide number badge */}
+              <div className="absolute top-4 right-4 bg-slate-950 border border-slate-850 text-slate-450 text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                Slide {currentSlideIndex + 1} of {briefData.presentation_slides.length}
+              </div>
+
+              {/* Title & Subtitle */}
+              <div className="space-y-1">
+                <span className="text-[10px] font-extrabold text-violet-400 tracking-widest uppercase">
+                  {currentSlideIndex === 0 ? briefData.title : `Slide ${currentSlideIndex + 1}`}
+                </span>
+                <h2 className="text-2xl font-extrabold text-slate-100 leading-tight">
+                  {briefData.presentation_slides[currentSlideIndex].title}
+                </h2>
+              </div>
+
+              {/* Slide Bullet points */}
+              <div className="flex-1 flex flex-col justify-center my-6 space-y-4 max-w-2xl">
+                {briefData.presentation_slides[currentSlideIndex].bullet_points.map((pt, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 bg-violet-500 rounded-full mt-2 shrink-0" />
+                    <p className="text-sm text-slate-200 leading-relaxed font-semibold">
+                      {pt}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Slide Footer */}
+              <div className="text-[10px] text-slate-500 italic flex items-center justify-between border-t border-slate-950 pt-3">
+                <span>Generated autonomously by PaperPilot</span>
+                <span>Feynman Mode: {eli5 ? 'Active' : 'Inactive'}</span>
+              </div>
+            </div>
+
+            {/* Slide Navigation */}
+            <div className="flex items-center justify-between mt-5 pt-3.5 border-t border-slate-900">
+              <button
+                disabled={currentSlideIndex === 0}
+                onClick={() => setCurrentSlideIndex(prev => prev - 1)}
+                className="px-4 py-2 bg-slate-900 hover:bg-slate-850 disabled:opacity-40 border border-slate-800 disabled:border-slate-900 rounded-xl text-xs font-bold text-slate-300 transition-colors cursor-pointer"
+              >
+                ◀ Previous Slide
+              </button>
+              <span className="text-slate-450 text-xs font-bold">
+                {currentSlideIndex + 1} / {briefData.presentation_slides.length}
+              </span>
+              <button
+                disabled={currentSlideIndex === briefData.presentation_slides.length - 1}
+                onClick={() => setCurrentSlideIndex(prev => prev + 1)}
+                className="px-4 py-2 bg-slate-900 hover:bg-slate-850 disabled:opacity-40 border border-slate-800 disabled:border-slate-900 rounded-xl text-xs font-bold text-slate-300 transition-colors cursor-pointer"
+              >
+                Next Slide ▶
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
       </div>
     </main>
   );

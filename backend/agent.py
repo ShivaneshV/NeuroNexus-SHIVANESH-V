@@ -46,6 +46,11 @@ class ReplicationTool(BaseModel):
     github_url: str = Field(description="A search URL query to find this tool/code on GitHub, e.g., 'https://github.com/search?q=...'")
     kaggle_url: str = Field(description="A search URL query to find this dataset/code on Kaggle, e.g., 'https://www.kaggle.com/search?q=...'")
 
+class PresentationSlide(BaseModel):
+    slide_number: int = Field(description="The index of the slide, 1 to 5")
+    title: str = Field(description="The title of the slide (e.g., 'Core Problem', 'Methodology & Setup', 'Results')")
+    bullet_points: List[str] = Field(description="List of exactly 3 to 4 clear, short, structured bullet points summarizing the slide contents.")
+
 class PaperBriefOutput(BaseModel):
     title: str = Field(description="The official title of the academic paper.")
     abstract_summary: str = Field(description="A brief 2-sentence summary of the paper's core objective.")
@@ -59,6 +64,7 @@ class PaperBriefOutput(BaseModel):
     concept_map: ConceptMap = Field(description="A structured concept map showing relationships between key terms.")
     podcast_script: List[PodcastDialogue] = Field(description="A 5 to 6 turn conversational dialogue script between a Host and a Researcher explaining the paper in simple, auditory-friendly language.")
     replicate_tools: List[ReplicationTool] = Field(description="List of tools, packages, neural networks, or datasets mentioned in the methodology, linked to search queries for quick replication.")
+    presentation_slides: List[PresentationSlide] = Field(description="List of exactly 5 structured presentation slides outlining the paper (Slide 1: Intro, Slide 2: Problem, Slide 3: Method, Slide 4: Results, Slide 5: Conclusion).")
 
 def get_active_client() -> Tuple[str, Any]:
     """
@@ -117,7 +123,8 @@ def generate_single_pass_brief(retrieved_chunks: List[Dict[str, Any]], eli5: boo
         "6. Create a Conversational Podcast: Write a 5 to 6 turn script (`podcast_script`) where a 'Host' interviews a 'Researcher'. "
         "Make it engaging, conversational, and explanatory. The dialogue should discuss the core problem, how they solved it, and the results.\n"
         "7. Generate Replication Links: Extract open-source tools, datasets, neural network layers, libraries, or algorithms mentioned in the paper. "
-        "For each tool, generate a GitHub and Kaggle query URL (e.g., github_url='https://github.com/search?q=attention+mechanism', kaggle_url='https://www.kaggle.com/search?q=packet+dataset').\n\n"
+        "For each tool, generate a GitHub and Kaggle query URL (e.g., github_url='https://github.com/search?q=attention+mechanism', kaggle_url='https://www.kaggle.com/search?q=packet+dataset').\n"
+        "8. Generate Presentation Slides: Produce exactly 5 structured presentation slides outlining the paper. Slide 1 must cover the Introduction and title, Slide 2 the Core Problem or target question, Slide 3 the Methodology & pipeline, Slide 4 the Experimental Results & findings, and Slide 5 the Critical Limitations & conclusions.\n\n"
         "Ensure all output strictly conforms to the JSON structure provided. Do not hallucinate citations. "
         "Only cite from the chunks supplied in the context."
     )
