@@ -78,7 +78,7 @@ export default function Home() {
     setChatLoading(true);
 
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/chat', {
+      const res = await fetch('http://localhost:8000/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ file_hash: fileHash, question: userQuestion }),
@@ -118,7 +118,7 @@ export default function Home() {
 
   const fetchStats = async () => {
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/stats');
+      const res = await fetch('http://localhost:8000/api/stats');
       if (res.ok) {
         const data = await res.json();
         setStats(data);
@@ -131,7 +131,7 @@ export default function Home() {
   const handleResetStats = async () => {
     if (!confirm('Are you sure you want to reset the API tracking statistics?')) return;
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/stats/reset', { method: 'POST' });
+      const res = await fetch('http://localhost:8000/api/stats/reset', { method: 'POST' });
       if (res.ok) {
         fetchStats();
       }
@@ -166,7 +166,7 @@ export default function Home() {
     formData.append('file', selectedFile);
 
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/upload', {
+      const res = await fetch('http://localhost:8000/api/upload', {
         method: 'POST',
         body: formData,
       });
@@ -197,7 +197,7 @@ export default function Home() {
     setStatusMessage(`Executing local vector search & calling single-pass LLM agent (ELI5=${eli5Mode})...`);
     
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/brief', {
+      const res = await fetch('http://localhost:8000/api/brief', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ file_hash: hash, eli5: eli5Mode }),

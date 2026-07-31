@@ -34,8 +34,8 @@ if (-not (Test-Path .env)) {
 }
 
 # 2. Launch FastAPI Backend in a new window
-Write-Host "[*] Launching FastAPI Backend on http://127.0.0.1:8000..." -ForegroundColor Cyan
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "Title 'PaperPilot Backend (FastAPI)'; cd backend; uvicorn main:app --reload --port 8000"
+Write-Host "[*] Launching FastAPI Backend on http://localhost:8000..." -ForegroundColor Cyan
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "Title 'PaperPilot Backend (FastAPI)'; cd backend; uvicorn main:app --reload --host 0.0.0.0 --port 8000"
 
 # 3. Launch Next.js Frontend in a new window
 Write-Host "[*] Launching Next.js Frontend on http://localhost:3000..." -ForegroundColor Cyan
@@ -43,6 +43,6 @@ Start-Process powershell -ArgumentList "-NoExit", "-Command", "Title 'PaperPilot
 
 Write-Host "=========================================" -ForegroundColor Green
 Write-Host " Both servers launched in separate windows!" -ForegroundColor Green
-Write-Host " - Backend API: http://127.0.0.1:8000" -ForegroundColor Green
+Write-Host " - Backend API: http://localhost:8000" -ForegroundColor Green
 Write-Host " - Frontend UI: http://localhost:3000" -ForegroundColor Green
 Write-Host "=========================================" -ForegroundColor Green

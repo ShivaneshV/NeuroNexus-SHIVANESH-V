@@ -18,7 +18,7 @@ export default function PdfViewer({ fileHash, highlightedPage, citationContext }
 
   // Construct PDF URL with target page number hash fragment
   // E.g., http://localhost:8000/api/pdfs/12345.pdf#page=2
-  const baseUrl = `http://127.0.0.1:8000/api/pdfs/${fileHash}`;
+  const baseUrl = `http://localhost:8000/api/pdfs/${fileHash}`;
   const pdfUrl = highlightedPage ? `${baseUrl}#page=${highlightedPage}` : baseUrl;
 
   return (
