@@ -4,6 +4,12 @@ import sys
 import json
 import io
 
+# Map streamlit secrets to environment variables automatically
+if "GROQ_API_KEY" in st.secrets:
+    os.environ["GROQ_API_KEY"] = st.secrets["GROQ_API_KEY"]
+if "OPENAI_API_KEY" in st.secrets:
+    os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+
 # Setup python path to import backend modules
 sys.path.append(os.path.join(os.path.dirname(__file__), "backend"))
 
