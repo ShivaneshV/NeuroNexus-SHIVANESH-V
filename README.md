@@ -1,5 +1,8 @@
 # PaperPilot ✈️ (Autonomous Research Briefing & Pedagogy Agent)
 
+### 🧠 **Team**: Neuro Nexus | 🎓 **Team Lead**: Shivanesh V
+*SOCF 2.0 Hackathon Grand Finale Submission — Agentic AI Track*
+
 **PaperPilot** is a next-generation autonomous research and pedagogy agent designed to ingest academic PDFs and transform them into **interactive study resources, structured visual mindmaps, 2-person podcast scripts, and premium slide presentations** in a single pass—all while maintaining absolute factual grounding and extreme API efficiency.
 
 Built for the **Agentic AI Track** of the SOCF 2.0 hackathon, PaperPilot showcases how developer productivity and student learning speed can be accelerated using a RAG pipeline optimized for local compute, zero-cost client-side speech synthesis, and persistent caching.

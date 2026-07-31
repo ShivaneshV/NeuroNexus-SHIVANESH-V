@@ -75,17 +75,17 @@ def create_presentation():
     main_title_box = slide1.shapes.add_textbox(Inches(1.0), Inches(2.4), Inches(11.3), Inches(1.8))
     mt_tf = main_title_box.text_frame
     mt_p = mt_tf.paragraphs[0]
-    mt_p.text = "PaperPilot"
+    mt_p.text = "PaperPilot ✈️"
     mt_p.font.name = 'Arial'
-    mt_p.font.size = Pt(64)
+    mt_p.font.size = Pt(56)
     mt_p.font.bold = True
     mt_p.font.color.rgb = text_light
 
     # Add color-highlighted subtitle text in the same frame
     mt_p2 = mt_tf.add_paragraph()
-    mt_p2.text = "Autonomous Research Briefing Agent"
+    mt_p2.text = "Autonomous Research Briefing & Pedagogy Agent"
     mt_p2.font.name = 'Arial'
-    mt_p2.font.size = Pt(24)
+    mt_p2.font.size = Pt(20)
     mt_p2.font.color.rgb = primary_color
     mt_p2.space_before = Pt(10)
 
@@ -93,11 +93,11 @@ def create_presentation():
     meta_box = slide1.shapes.add_textbox(Inches(1.0), Inches(5.2), Inches(11.3), Inches(1.0))
     meta_tf = meta_box.text_frame
     meta_p = meta_tf.paragraphs[0]
-    meta_p.text = "Designed for Flawless Presentation & Infinite API Efficiency"
+    meta_p.text = "Team: Neuro Nexus  •  Team Lead: Shivanesh V  •  Agentic AI Track"
     meta_p.font.name = 'Arial'
     meta_p.font.size = Pt(12)
     meta_p.font.color.rgb = text_muted
-    meta_p.font.italic = True
+    meta_p.font.bold = True
 
     # ==========================================
     # SLIDE 2: The Core Problem in Academic RAG

@@ -349,19 +349,23 @@ export default function Home() {
           </div>
           <div>
             <h1 className="text-lg font-bold tracking-tight bg-gradient-to-r from-slate-100 via-slate-100 to-slate-400 bg-clip-text text-transparent flex items-center gap-2">
-              PaperPilot
+              PaperPilot ✈️
             </h1>
             <p className="text-[10px] font-medium text-indigo-400 uppercase tracking-widest">
-              AntigravityAcademIQ
+              Autonomous Research Briefing & Pedagogy Agent
             </p>
           </div>
         </div>
         
         <div className="flex items-center gap-4">
+          <div className="text-right">
+            <span className="text-[10px] font-bold text-slate-400 block uppercase tracking-wider">Team: Neuro Nexus</span>
+            <span className="text-[9px] text-indigo-450 block font-semibold">Lead: Shivanesh V</span>
+          </div>
           <span className="text-xs px-3 py-1 bg-indigo-950/50 border border-indigo-900/50 rounded-full text-indigo-300 font-semibold shadow-inner">
             Agentic AI Track
           </span>
-          <span className="text-xs text-slate-400">SOCF 2.0 Hackathon Entry</span>
+          <span className="text-xs text-slate-400">SOCF 2.0 Entry</span>
         </div>
       </header>
 
