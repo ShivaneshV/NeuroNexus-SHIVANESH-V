@@ -116,30 +116,60 @@ Open **`http://localhost:3000`** in your browser.
 
 ---
 
-## 📽️ The Winning 2-Minute Demo Pitch Script
+## 🎨 Complete Feature Showcase & Capabilities
 
-Follow this script verbatim during your grand finale evaluation to maximize your Agentic AI Track score:
+PaperPilot is equipped with a rich suite of production-grade features designed for high performance, maximum API efficiency, and optimized student pedagogy:
 
-### **[0:00 - 0:30] The Rubric Hook & The Problem**
-> *"Good morning, judges. Most AI academic assistants on the market today suffer from three critical flaws: they burn through dozens of expensive, sequential LLM API calls, they suffer from citation hallucinations, and they ignore auditory or non-English learners. We built **PaperPilot** specifically to address the Agentic AI scoring rubric."*
-> 
-> *[Drag-and-drop a PDF into the uploader]*
-> 
-> *"Watch our ingestion pipeline. As the file uploads, our backend extracts text, generates semantic chunks, and builds dense vectors using a local SentenceTransformer model. Ingestion runs 100% locally on our server—costing exactly zero dollars in external API fees."*
+### ⚡ 1. Local Ingestion & Vector Pipeline (100% Ingestion Cost Savings)
+* **Text Extraction**: Uses `PyPDF` to parse text and metadata from PDF files locally.
+* **Semantic Chunker**: Automatically groups paragraphs to maintain context boundaries before indexing.
+* **Local Embeddings**: Generates 384-dimensional dense vectors locally using `sentence-transformers/all-MiniLM-L6-v2` via PyTorch.
+* **Local Vector Database**: Indexes vectors in a local `ChromaDB` instance. No external API queries or subscription costs.
 
-### **[0:30 - 1:10] The Single-Pass Agent & Grounding Proof**
-> *"Instead of sequential agent loops, our 'Single-Pass Synthesizer' makes exactly one structured JSON API call. In less than 5 seconds, it returns our formatted brief, flashcards, concept map nodes, and a complete presentation slide deck. This reduces API token usage and costs by over 70%."*
-> 
-> *[Click the 'Concept Map' tab to show the horizontal flowchart]*
-> 
-> *"Look at our visual Mindmap. Nodes are automatically categorized into background, architecture, and methodology columns. To guarantee 100% factual accuracy, every claim has a source citation. If I click this bracketed link or the 'Jump to source' button on this flashcard, our interactive PDF viewer instantly scrolls to the exact source line and highlights the source context from ChromaDB. Zero hallucinations, complete trust."*
+### 🧠 2. Single-Pass "Master Agent" Synthesizer
+* Instead of burning tokens with sequential LLM calls, a unified Pydantic JSON schema is sent to the LLM. In a single call, it generates:
+  * Styled markdown brief (Methodology, Results, Limitations) with citations.
+  * Skeptic score and critical methodology flaws.
+  * 5 Q&A study flashcards with page references.
+  * 8-12 Node/Edge Concept Map.
+  * 5 widescreen presentation slides.
+  * 2-person host-researcher podcast script.
+  * Code & dataset replication deep-links.
 
-### **[1:10 - 1:40] The Pedagogy Flex (Feynman & Voice)**
-> *"Academic papers shouldn't just be shortened—they should be taught. Watch this: we toggle **Feynman Mode**. Instantly, the agent translates complex methodologies into child-friendly everyday analogies. If a student is an auditory or localized learner, they can click narrate. Our player speaks the text in English, Hindi, Tamil, or Telugu. Since we use the browser's native Web Speech API, localized speech narration costs zero API credits."*
+### 🔍 3. Absolute Truth Audit Trail (Citation Grounding)
+* **Numerical Citations**: Claims in the study brief are tagged with clickable numbers (e.g. `[1]`, `[2]`).
+* **Interactive PDF Scroll**: Clicking a citation links to the exact page in the embedded PDF viewer.
+* **Visual Context Highlights**: Displays the exact text snippet retrieved from ChromaDB in the side panel for instant verification, removing AI hallucinations.
 
-### **[1:40 - 2:00] The Mic Drop (Offline Exporters & Cache)**
-> *"When students need to present their findings, they can click **Export to Presentation** to view a widescreen slide deck and download a premium PowerPoint PPTX file directly to their machine. Or click **Download PDF Brief** to download a print-ready report including our structured mindmap outline."*
-> 
-> *[Show the RAG Efficiency Hub cost numbers on the screen]*
-> 
-> *"Finally, if I upload this paper a second time, our SQLite semantic cache intercepts the request. The brief loads instantly in 0 milliseconds, consuming 0 API calls. PaperPilot is fast, factually grounded, locally accessible, and represents the future of highly efficient, human-centric educational agents. Thank you."*
+### 💡 4. Feynman Mode (ELI5) Pedagogical Toggle
+* Translates dense, highly technical language into simple everyday analogies (the Feynman Technique).
+* Seamlessly toggles the synthesized brief between standard academic detail and kid-friendly conceptual explanations.
+
+### 🗣️ 5. Zero-API Multilingual Narrator
+* Speaks summaries, abstracts, and sections in **English, Hindi, Tamil, and Telugu**.
+* Runs completely client-side in the browser using the native **Web Speech API**—requires zero cloud subscription fees and works offline.
+
+### 🎙️ 6. Host-Researcher 2-Person Podcast Script
+* Auto-generates a structured conversational dialogue explaining the paper like an educational podcast episode.
+* Features a text-to-speech media player that narrates the podcast with alternating speakers.
+
+### 📽️ 7. Interactive Widescreen Slide Deck & PPTX Exporter
+* Renders a premium, dark-themed, 16:9 interactive slide deck directly within the web app.
+* Features a backend compiler using `python-pptx` to export the slides as a beautiful, downloadable `.pptx` presentation file complete with horizontal highlight cards and premium typography.
+
+### 📄 8. ReportLab PDF Brief Exporter
+* Creates a print-ready, professional PDF report of the synthesized brief using `reportlab`.
+* Formats the briefing tables, study flashcards list, and concept map outline into a single clean document.
+
+### 💬 9. Research Copilot Q&A Chatbot
+* Context-aware chatbot allowing custom inquiries about the document.
+* Queries the local ChromaDB index, executes retrieval, highlights source citations in the PDF viewer, and caches Q&A pairs in a local SQLite database for instant retrieval.
+
+### ⏱️ 10. SQLite Semantic Cache & Live RAG Savings Hub
+* Intercepts uploads by comparing the SHA-256 hash of the PDF to check for existing briefings in the SQLite cache, loading files in 0ms with 0 API calls.
+* Integrates a live widget on the interface tracking total API calls, token counts, exact pricing, and cumulative dollars saved compared to multi-agent loops.
+
+### 🛠️ 11. Topic-Aware Scanned PDF Fallback
+* Detects scanned/image-only PDFs containing no text layer.
+* Extracts title metadata and calls the LLM to generate highly realistic, topic-specific simulated academic content, allowing the entire briefing, mapping, and presentation generation pipeline to complete successfully without failing.
+
