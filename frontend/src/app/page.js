@@ -140,6 +140,31 @@ export default function Home() {
     }
   };
 
+  const handleDownloadPdf = async () => {
+    try {
+      const res = await fetch('http://localhost:8000/api/download_pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ file_hash: fileHash, brief: briefData }),
+      });
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `PaperPilot_${fileHash.substring(0, 8)}_Report.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      } else {
+        alert('Failed to generate PDF report.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error connecting to report server.');
+    }
+  };
+
   // Load API tracking stats on mount
   useEffect(() => {
     fetchStats();
@@ -389,6 +414,15 @@ export default function Home() {
                   className="px-4 py-2 text-xs font-bold border rounded-xl shadow-md transition-all flex items-center gap-1.5 bg-violet-950/40 text-violet-300 border-violet-800 hover:bg-violet-900/40 cursor-pointer animate-fade-in"
                 >
                   📽️ Export to Presentation
+                </button>
+              )}
+
+              {briefData && (
+                <button
+                  onClick={handleDownloadPdf}
+                  className="px-4 py-2 text-xs font-bold border rounded-xl shadow-md transition-all flex items-center gap-1.5 bg-emerald-950/40 text-emerald-300 border-emerald-800 hover:bg-emerald-900/40 cursor-pointer animate-fade-in"
+                >
+                  📥 Download PDF Brief
                 </button>
               )}
             </div>
@@ -692,7 +726,7 @@ export default function Home() {
                   {/* Tab 3: Concept Map */}
                   {activeTab === 'concept_map' && (
                     <div className="animate-fade-in">
-                      <ConceptMap data={briefData.concept_map} />
+                      <ConceptMap data={briefData.concept_map} paperBrief={briefData} />
                     </div>
                   )}
 
