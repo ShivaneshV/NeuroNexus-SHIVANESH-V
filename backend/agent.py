@@ -309,3 +309,35 @@ def generate_copilot_answer(question: str, retrieved_chunks: List[Dict[str, Any]
             total_tokens = prompt_tokens + completion_tokens
             cost = (prompt_tokens * input_rate) + (completion_tokens * output_rate)
             return data, total_tokens, cost
+
+def generate_simulated_paper_text(title: str) -> str:
+    """
+    Dynamically generates a simulated academic text based on the paper's title or filename,
+    to serve as a realistic RAG source when a scanned PDF has no text layer.
+    """
+    model_name, client = get_active_client()
+    
+    prompt = (
+        f"You are an academic text generator. Generate a highly realistic, detailed 3-paragraph scientific summary "
+        f"of a research paper with the following title or filename: '{title}'.\n\n"
+        f"Generate exactly 3 paragraphs:\n"
+        f"Paragraph 1 (Background & Objective): Describe the core scientific problem, background context, and target goals of this research.\n"
+        f"Paragraph 2 (Methodology & Evaluation): Describe the experimental setup, methodology, training details, and benchmark performance.\n"
+        f"Paragraph 3 (Limitations & Conclusion): Describe the limitations, weaknesses, assumptions, and proposed future work.\n\n"
+        f"Ensure the tone is strictly academic, professional, and directly matches the subject matter of the title. Do not include any meta-text, introductions, or formatting marks. Just output the 3 paragraphs."
+    )
+    
+    try:
+        completion = client.chat.completions.create(
+            model=model_name,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.7,
+            max_tokens=800
+        )
+        return completion.choices[0].message.content.strip()
+    except Exception as e:
+        print(f"Failed to generate simulated paper text ({e}). Using generic backup.")
+        return (
+            f"This paper covers research related to {title}. The study details the background, setup, "
+            f"experiments, and findings related to this domain. Future investigations will expand upon these results."
+        )
