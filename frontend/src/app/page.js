@@ -10,6 +10,8 @@ import Flashcards from '../components/Flashcards';
 import ConceptMap from '../components/ConceptMap';
 import PdfViewer from '../components/PdfViewer';
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 export default function Home() {
   // App states
   const [file, setFile] = useState(null);
@@ -78,7 +80,7 @@ export default function Home() {
     setChatLoading(true);
 
     try {
-      const res = await fetch('http://localhost:8000/api/chat', {
+      const res = await fetch(`${API_BASE}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ file_hash: fileHash, question: userQuestion }),
@@ -117,7 +119,7 @@ export default function Home() {
 
   const handleDownloadPptx = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/download_presentation', {
+      const res = await fetch(`${API_BASE}/api/download_presentation`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ file_hash: fileHash, slides: briefData.presentation_slides }),
@@ -142,7 +144,7 @@ export default function Home() {
 
   const handleDownloadPdf = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/download_pdf', {
+      const res = await fetch(`${API_BASE}/api/download_pdf`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ file_hash: fileHash, brief: briefData }),
@@ -172,7 +174,7 @@ export default function Home() {
 
   const fetchStats = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/stats');
+      const res = await fetch(`${API_BASE}/api/stats`);
       if (res.ok) {
         const data = await res.json();
         setStats(data);
@@ -185,7 +187,7 @@ export default function Home() {
   const handleResetStats = async () => {
     if (!confirm('Are you sure you want to reset the API tracking statistics?')) return;
     try {
-      const res = await fetch('http://localhost:8000/api/stats/reset', { method: 'POST' });
+      const res = await fetch(`${API_BASE}/api/stats/reset`, { method: 'POST' });
       if (res.ok) {
         fetchStats();
       }
@@ -220,7 +222,7 @@ export default function Home() {
     formData.append('file', selectedFile);
 
     try {
-      const res = await fetch('http://localhost:8000/api/upload', {
+      const res = await fetch(`${API_BASE}/api/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -251,7 +253,7 @@ export default function Home() {
     setStatusMessage(`Executing local vector search & calling single-pass LLM agent (ELI5=${eli5Mode})...`);
     
     try {
-      const res = await fetch('http://localhost:8000/api/brief', {
+      const res = await fetch(`${API_BASE}/api/brief`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ file_hash: hash, eli5: eli5Mode }),
