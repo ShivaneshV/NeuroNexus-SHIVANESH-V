@@ -51,16 +51,39 @@ const GROUP_STYLES = {
   }
 };
 
-export default function ConceptMap({ data }) {
+export default function ConceptMap({ data, paperBrief }) {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   useEffect(() => {
-    if (!data || !data.nodes) return;
+    let mapData = data;
+    
+    // Check if we need to generate a beautiful fallback flowchart
+    if (!mapData || !mapData.nodes || mapData.nodes.length <= 2) {
+      if (paperBrief) {
+        mapData = {
+          nodes: [
+            { id: 'node-bg', label: paperBrief.title || 'Paper Overview', group: 'background' },
+            { id: 'node-arch', label: 'Proposed System Architecture', group: 'architecture' },
+            { id: 'node-method', label: 'Core Technical Pipeline', group: 'methodology' },
+            { id: 'node-results', label: 'Experimental Performance', group: 'results' },
+            { id: 'node-conclusion', label: 'Conclusion & Future Work', group: 'results' },
+          ],
+          edges: [
+            { source: 'node-bg', target: 'node-arch', label: 'implements' },
+            { source: 'node-arch', target: 'node-method', label: 'executes' },
+            { source: 'node-method', target: 'node-results', label: 'measures' },
+            { source: 'node-results', target: 'node-conclusion', label: 'bounds' },
+          ]
+        };
+      }
+    }
+
+    if (!mapData || !mapData.nodes) return;
 
     // 1. Group nodes for semantic layout positioning
     const groupedNodes = {};
-    data.nodes.forEach(node => {
+    mapData.nodes.forEach(node => {
       const g = (node.group || 'default').toLowerCase();
       if (!groupedNodes[g]) groupedNodes[g] = [];
       groupedNodes[g].push(node);
@@ -116,7 +139,7 @@ export default function ConceptMap({ data }) {
     });
 
     // 3. Format edges
-    const computedEdges = (data.edges || []).map((edge, idx) => ({
+    const computedEdges = (mapData.edges || []).map((edge, idx) => ({
       id: `edge-${idx}`,
       source: edge.source,
       target: edge.target,
@@ -132,7 +155,7 @@ export default function ConceptMap({ data }) {
 
     setNodes(computedNodes);
     setEdges(computedEdges);
-  }, [data, setNodes, setEdges]);
+  }, [data, paperBrief, setNodes, setEdges]);
 
   return (
     <div className="w-full h-[550px] bg-zinc-950 border border-slate-900 rounded-2xl overflow-hidden relative shadow-inner">
